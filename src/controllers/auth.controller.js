@@ -1,7 +1,7 @@
-import asyncHandler from "../utils/asyncHandler.js"
-import ApiError from "../utils/ApiError.js"
+import {asyncHandler} from "../utils/asyncHandler.js"
+import {ApiError} from "../utils/ApiError.js"
 import { User } from "../models/user.model.js"
-import ApoResponse from "../utils/ApiResponse.js"
+import {ApiResponse} from "../utils/ApiResponse.js"
 
 const generateAccessAndRefreshToken = async (userId) => {
     try {
@@ -67,7 +67,7 @@ const userLogin = asyncHandler(async (req, res) => {
             throw new ApiError(400, "All Fields are Required")
         }
     
-        const user = await User.findOne({ email }).select("+password")
+        const user = await User.findOne({ email })
         if (!user) {
             throw new ApiError(404, "This User Doesnot Exist")
         }
@@ -78,9 +78,9 @@ const userLogin = asyncHandler(async (req, res) => {
         }
     
         const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
-    
+
         const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
-    
+
         const options = {
             httpOnly: true,
             secure: true,
@@ -98,8 +98,9 @@ const userLogin = asyncHandler(async (req, res) => {
                     "User Logged in Successfully"
                 )
             )
+
     } catch (error) {
-        throw new ApiError(500, "Something went wrong while Logging in User", error.message)
+        throw new ApiError(500, "Something went wrong while Logging in User", error)
     }
 
 })
