@@ -1,6 +1,6 @@
 import express from "express"
 import { admin, manager, user } from "../controllers/user.controller.js"
-import verifyJWT from "../middlewares/Auth.js"
+import {verifyJWT} from "../middlewares/Auth.js"
 
 const userRouter = express.Router()
 
